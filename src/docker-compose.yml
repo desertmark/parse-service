@@ -1,0 +1,6 @@
+services:
+  parseservice:
+    image: desertmark/parse-service:0.0.2
+    build: .
+    ports:
+      - "3002:80"

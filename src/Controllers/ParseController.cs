@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using parse_service.Managers;
+using parse_service.Repositories;
 namespace parse_service.Controllers;
 
 [ApiController]
@@ -8,12 +9,14 @@ namespace parse_service.Controllers;
 public class ParseController : ControllerBase
 {
     private readonly ILogger<dynamic> logger;
+    private readonly IOdbcRepository odbcRepository;
     private readonly IParseManager parseManager;
 
-    public ParseController(ILogger<dynamic> logger, IParseManager parseManager)
+    public ParseController(ILogger<dynamic> logger, IParseManager parseManager, IOdbcRepository odbcRepository)
     {
         this.logger = logger;
         this.parseManager = parseManager;
+        this.odbcRepository = odbcRepository;
     }
 
     [HttpPost(Name = "xls")]
@@ -35,11 +38,12 @@ public class ParseController : ControllerBase
 
     [HttpPost(Name = "mdb")]
     [Route("mdb")]
-    public ParseResponse Post(IFormFile file)
+    public ParseResponse Post(IFormFile file, [FromForm] string tableName)
     {
         try
         {
-            return new ParseResponse(new { test = "test" }, "json");
+            var data = this.odbcRepository.Get(file, tableName);
+            return new ParseResponse(data, "json");
         }
         catch (Exception error)
         {

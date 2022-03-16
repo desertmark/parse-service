@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using parse_service.Managers;
+using parse_service.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Custom Services
+builder.Services.AddScoped<IOdbcRepository, OdbcRepository>();
 builder.Services.AddScoped<IParseManager, ParseManager>();
 
 var app = builder.Build();
