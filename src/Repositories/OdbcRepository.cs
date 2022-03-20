@@ -10,7 +10,7 @@ namespace parse_service.Repositories
         {
             var path = Path.GetTempFileName();
             file.CopyTo(new FileStream(path, FileMode.Create, FileAccess.ReadWrite));
-            var connection = new OdbcConnection($"Driver={{Microsoft Access Driver (*.mdb, *.accdb)}};Dbq={path}";);
+            var connection = new OdbcConnection($"Driver={{Microsoft Access Driver (*.mdb, *.accdb)}};Dbq={path};");
             var queryText = $"SELECT * FROM {tableName}";
             var data = connection.Query<dynamic>(queryText);
             return data.ToList();

@@ -45,10 +45,21 @@ public class ParseManager : IParseManager
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
                     var colName = header[i];
-                    var cellValue = reader.GetValue(i).ToString();
-                    row.setKey(colName, cellValue);
+                    try
+                    {
+                        var cellValue = reader.GetValue(i).ToString();
+                        row.setKey(colName, cellValue);
+                    }
+                    catch (NullReferenceException error)
+                    {
+                        // Row exists but is empty.
+                        logger.LogWarning("Empty row found while reading the file.", error, reader, header);
+                    }
                 }
-                rows.Add(row.obj);
+                if (row.hasKeys()) {
+                    rows.Add(row.obj);
+                }
+
             }
             return rows;
         }

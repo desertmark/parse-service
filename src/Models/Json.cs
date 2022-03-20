@@ -10,4 +10,9 @@ public class Json
     {
         ((IDictionary<string, object>)obj).Add(key, value);
     }
+
+    public Boolean hasKeys()
+    {
+        return ((IDictionary<string, object>)obj).Keys.Count() > 0;
+    }
 }
